@@ -1,4 +1,6 @@
 """
+Use only do_work() function!
+
 Input example:
 
 90 60 2 10
@@ -262,9 +264,10 @@ def c_scan(right = True):
     return result
 
 
-def do_work():
-    inp = open("input.txt").read()
-    res = parse_input(inp)
+# USE ONLY THIS FUNCTION!!!
+def do_work(string_input):
+    # string_input = open("input.txt").read()
+    res = parse_input(string_input)
     # print("Input is parsed successfully:", res)
     # print("N of cylinders:", global_vars['n_cylinders'])
     # print("Start cylinder:", global_vars['start_index'])
@@ -272,25 +275,24 @@ def do_work():
     # print("Parking time:", global_vars['park_time'])
     # print("Parking index:", global_vars['park_index'])
     if not res:
-        print("fail")
-        return
-    print("_____FCFS:_____")
-    print(fcfs())
+        return "fail"
+    answer = ""
+    answer += "_____FCFS:_____\n"
+    answer += fcfs() + "\n"
     
-    print("\n_____SSTF:_____")
-    print(sstf())
+    answer += "\n_____SSTF:_____\n"
+    answer += sstf() + "\n"
     
-    print("\n___SCAN (start to right):___")
-    print(scan(True))
+    answer += "\n___SCAN (start to right):___\n"
+    answer += scan(True) + "\n"
     
-    print("\n___SCAN (start to left):___")
-    print(scan(False))
+    answer += "\n___SCAN (start to left):___\n"
+    answer += scan(False) + "\n"
     
-    print("\n___C-SCAN (start to right):___")
-    print(c_scan(True))
+    answer += "\n___C-SCAN (start to right):___\n"
+    answer += c_scan(True) + "\n"
     
-    print("\n___C-SCAN (start to left):___")
-    print(c_scan(False))
-
-
-do_work()
+    answer += "\n___C-SCAN (start to left):___\n"
+    answer += c_scan(False) + "\n"
+    
+    return answer
