@@ -28,23 +28,23 @@ Russian description:
 """
 from queue import *
 
-global_vars = {
-    'n_cylinders': 0,
-    'start_index': 0,
-    'switch_time': 0,
-    'park_time': 0,
-}
-requests_list = []
-
 
 def parse_input(string_input):
+    global_vars = {
+        'n_cylinders': 0,
+        'start_index': 0,
+        'switch_time': 0,
+        'park_time': 0,
+    }
+    requests_list = []
+    
     lines = str(string_input).splitlines()
     if len(lines) <= 1:
-        return False
+        return False, None, None
     
     parameters = lines[0].split()
     if len(parameters) != 4:
-        return False
+        return False, None, None
     
     try:
         global_vars['n_cylinders'] = int(parameters[0])
@@ -60,12 +60,12 @@ def parse_input(string_input):
             requests_list.append([int(number) for number in new_line_args])
             i += 1
     except ValueError:
-        return False
-    return True
+        return False, None, None
+    return True, global_vars, requests_list
 
 
 # FCFS - first come, first served
-def fcfs():
+def fcfs(global_vars, requests_list):
     current_index = global_vars['start_index']
     switch_time = global_vars['switch_time']
     
@@ -98,7 +98,7 @@ def fcfs():
 
 
 # SSTF - short seek time first
-def sstf():
+def sstf(global_vars, requests_list):
     current_index = global_vars['start_index']
     switch_time = global_vars['switch_time']
     time_counter = 0
@@ -146,7 +146,7 @@ def sstf():
 
 
 # SCAN
-def scan(right = True):
+def scan(global_vars, requests_list, right = True):
     n_cylinders = global_vars['n_cylinders']
     current_index = global_vars['start_index']
     switch_time = global_vars['switch_time']
@@ -196,7 +196,7 @@ def scan(right = True):
 
 
 # С-SCAN
-def c_scan(right = True):
+def c_scan(global_vars, requests_list, right = True):
     n_cylinders = global_vars['n_cylinders']
     current_index = global_vars['start_index']
     switch_time = global_vars['switch_time']
@@ -223,7 +223,7 @@ def c_scan(right = True):
     
     result = ""
     
-    start = 0 if right else  n_cylinders - 1
+    start = 0 if right else n_cylinders - 1
     end = n_cylinders if right else -1
     step = 1 if right else -1
     should_break = False
@@ -266,8 +266,7 @@ def c_scan(right = True):
 
 # USE ONLY THIS FUNCTION!!!
 def do_work(string_input):
-    # string_input = open("input.txt").read()
-    res = parse_input(string_input)
+    res, global_vars, requests_list = parse_input(string_input)
     # print("Input is parsed successfully:", res)
     # print("N of cylinders:", global_vars['n_cylinders'])
     # print("Start cylinder:", global_vars['start_index'])
@@ -278,21 +277,24 @@ def do_work(string_input):
         return "fail"
     answer = ""
     answer += "_____FCFS:_____\n"
-    answer += fcfs() + "\n"
+    answer += fcfs(global_vars, requests_list) + "\n"
     
     answer += "\n_____SSTF:_____\n"
-    answer += sstf() + "\n"
+    answer += sstf(global_vars, requests_list) + "\n"
     
     answer += "\n___SCAN (start to right):___\n"
-    answer += scan(True) + "\n"
+    answer += scan(global_vars, requests_list, True) + "\n"
     
     answer += "\n___SCAN (start to left):___\n"
-    answer += scan(False) + "\n"
+    answer += scan(global_vars, requests_list, False) + "\n"
     
     answer += "\n___C-SCAN (start to right):___\n"
-    answer += c_scan(True) + "\n"
+    answer += c_scan(global_vars, requests_list, True) + "\n"
     
     answer += "\n___C-SCAN (start to left):___\n"
-    answer += c_scan(False) + "\n"
+    answer += c_scan(global_vars, requests_list, False) + "\n"
     
     return answer
+    
+# string_input = open("input.txt").read()
+# print(do_work(string_input))
